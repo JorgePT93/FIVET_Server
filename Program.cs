@@ -8,8 +8,8 @@ namespace Fivet.Server
     {
         /// <summary>
         /// Main starting point
-        /// <summary>
-        ///<param name="args"></param>
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -17,7 +17,7 @@ namespace Fivet.Server
 
         /// <summary>
         /// Build and configure a Host
-        /// <summary>
+        /// </summary>
         /// <param name="args"></param>
         /// <returns>The IhostBuilder</returns>
         public static IHostBuilder CreateHostBuilder(string[] args)
