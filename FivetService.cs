@@ -8,13 +8,33 @@ using Microsoft.Extensions.Logging;
 
 namespace Fivet.Server
 {
+    /// <summary>
+    /// The Fivet Service    
+    /// </summary>
     internal class FivetService : IHostedService
     {
+        /// <summary>
+        /// The Logger    
+        /// </summary>
         private readonly ILogger<FivetService> _logger;
 
+        /// <summary>
+        /// The Port    
+        /// </summary>
+        private readonly int _port = 8080;
+
+        /// <summary>
+        /// The Communicator    
+        /// </summary>
+        private readonly Communicator _communicator;
+
+        /// <summary>
+        /// The FivetService    
+        /// </summary>
         public FivetService(ILogger<FivetService> logger)
         {
             _logger = logger;
+            _communicator = buildCommunicator();
         }
 
         /// <summary>
@@ -23,6 +43,21 @@ namespace Fivet.Server
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogDebug("Starting the FivetService ...");
+
+            // The adapter: https://doc.zeroc.com/ice/7.3/client-side-features/proxies/proxy-and-endpoint-syntax
+            // tpc(protocol) -z (compression) -t 15000 (timeout in ms) -p 8080 (port to bind)
+            var adapter = _communicator.createObjectAdapterWithEndpoints("TheSystem", "tcp -z -t 15000 -p " + _port);
+
+            // The interface
+            TheSystem theSystem = new TheSystemImpl();
+
+            // Register in the communicator
+            adapter.add(theSystem, Util.stringToIdentity("TheSystem"));
+
+            // Activation
+            adapter.activate();
+
+            // All ok
             return Task.CompletedTask;
         }
 
@@ -32,14 +67,44 @@ namespace Fivet.Server
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Stopping the FivetService ...");
+
+            _communicator.shutdown();
+
+            _logger.LogDebug("Communicator Stopped ...");
+
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Build the Communicator
+        /// </summary>
+        /// <returns> The Communicator </returns>
+        private Communicator buildCommunicator()
+        {
+            _logger.LogDebug("Initializing Communicator v{0} ({1}) ...", Ice.Util.stringVersion(), Ice.Util.intVersion());
+
+            // ZeroC properties
+            Properties properties = Util.createProperties();
+            // https://doc.zeroc.com/ice/latest/property-reference/ice-trace
+            // properties.setProperty("Ice.Trace.Admin.Properties", "1");
+            // properties.setProperty("Ice.Trace.Locator", "2");
+            // properties.setProperty("Ice.Trace.Network", "3");
+            // properties.setProperty("Ice.Trace.Protocol", "1");
+            // properties.setProperty("Ice.Trace.Slicing", "1");
+            // properties.setProperty("Ice.Trace.ThreadPool", "1");
+            // properties.setProperty("Ice.Trace.Level", "9");
+
+            InitializationData initializationData = new InitializationData();
+            initializationData.properties = properties;
+
+            return Ice.Util.initialize(initializationData);
+        }
     }
-    
+
     /// <summary>
     /// The implementation of TheSystem interface
     /// </summary>
-    public class TheSystem : TheSystemDisp_
+    public class TheSystemImpl : TheSystemDisp_
     {
         /// <summary>
         /// Return the difference in time
@@ -52,28 +117,21 @@ namespace Fivet.Server
         }
     }
 
+}
+
+
+/// <summary>
+/// The implementation of TheSystem interface
+/// </summary>
+public class TheSystemImpl : TheSystemDisp_
+{
     /// <summary>
-    /// Build the Communicator
+    /// Return the difference in time
     /// </summary>
-    /// <returns> The Communicator </returns>
-    private Communicator buildCommunicator()
+    /// <param name="clientTime"></param>
+    /// <returns>The Delay</returns>
+    public override long getDelay(long clientTime, Ice.Current current = null)
     {
-        _logger.LogDebug("Initializing Communicator v{0} ({1}) ...", Ice.UtilstringVersion(), Ice.Util.intVersion());
-
-        // ZeroC properties
-        Properties properties = Util.createProperties();
-        // https://doc.zeroc.com/ice/latest/property-reference/ice-trace
-        // properties.setProperty("Ice.Trace.Admin.Properties", "1");
-        // properties.setProperty("Ice.Trace.Locator", "2");
-        // properties.setProperty("Ice.Trace.Network", "3");
-        // properties.setProperty("Ice.Trace.Protocol", "1");
-        // properties.setProperty("Ice.Trace.Slicing", "1");
-        // properties.setProperty("Ice.Trace.ThreadPool", "1");
-        // properties.setProperty("Ice.Trace.Level", "9");
-
-        InitializationData initializationData = new InitializationData();
-        initializationData.properties = properties;
-        
-        return Ice.Util.initialize(initializationData);
+        return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - clientTime;
     }
 }
