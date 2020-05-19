@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Fivet.ZeroIce.model;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -30,6 +31,14 @@ namespace Fivet.Server
         {
             _logger.LogInformation("Stopping the FivetService ...");
             return Task.CompletedTask;
+        }
+    }
+
+    public class TheSystem : TheSystemDisp_
+    {
+        public override long getDelay(long clientTime, Ice.Current current = null)
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - clientTime;
         }
     }
 }
