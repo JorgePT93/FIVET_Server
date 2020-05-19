@@ -1,71 +1,55 @@
-﻿using System;
-using Fivet.ZeroIce.model;
-using Ice;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Fivet.Server
 {
-    class TheSystemImpl : TheSystemDisp_
+    public class Program
     {
-        public override long getDelay(long clientTime, Current current = null)
-        {
-            return DateTime.Now.Ticks - clientTime;
-        }
+    /// <summary>
+    /// Main Starting Point
+    /// <summary>
+    /// <param name ="args"></param>
+    public static void Main (string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
     }
 
-    class Program
-    {
-        private static readonly int PORT = 8080;
-        static void Main(string[] args)
+    /// <summary>
+    /// Build And Configure A Host
+    /// <summary>
+    /// <returns>The IHostBuilder</returns>
+    public static IHostBuilder CreateHostBuilder(string[] args)=>
+        Host
+        .CreateDefaultBuilder(args)
+        // Development, Staging, Production
+        .UseEnvironment("Development")
+        // Logging Configuration
+        .ConfigureLogging(logging =>
         {
-            Console.WriteLine("Starting the Server...");
-            
-            using(var communicator = BuildCommunicator())
+            logging.ClearProviders();
+            logging.AddConsole(options =>
             {
-                // The adapter: https://doc.zeroc.com/ice/3.7/client-side-features/proxies/proxy-and-endpoint-syntax
-                // tpc (protocol) -z (compression) -t 15000 (imteout in ms) -p 8888 (port to bind)
-                var theAdapter = communicator.createObjectAdapterWithEndpoints("TheAdapter","tcp -z -t 15000 -p "+ PORT);
-
-                // Inline implementation (lambda)
-                TheSystem theSystem = new TheSystemImpl();
-
-                // Register TheSystem in the frameworks
-                theAdapter.add(theSystem, Util.stringToIdentity("TheSystem"));
-
-                // Everything ok, continue
-                theAdapter.activate();
-
-                // ... waiting
-                Console.WriteLine("Waiting for connections...");
-                communicator.waitForShutdown();
-            }
-            Console.WriteLine("Communication Ended.");
-        }
-
-        /// <summary>
-        /// The Communicator
-        /// <summary>
-        private static Communicator BuildCommunicator()
+                options.IncludeScopes = true;
+                options.TimestampFormat = "[yyyyMMdd.HHmmss.fff] ";
+                options.DisableColors = false;
+            });
+            logging.SetMinimumLevel(LogLevel.Trace);
+        })
+        // Enable Control+C listener
+        .UseConsoleLifeTime()
+        // Service Inside The DI
+        .ConfigureServices((context, services) =>
         {
-            // Console.WriteLine("[+] Building The Communicator...");
-
-            // ZeroC properties
-            Properties properties = Util.createProperties();
-
-            properties.setProperty("Ice.Trace.Admin.Properties","1");
-            properties.setProperty("Ice.Trace.Locator","2");
-            properties.setProperty("Ice.Trace.Network","3");
-            properties.setProperty("Ice.Trace.Protocol","4");
-            properties.setProperty("Ice.Trace.Slicing","5");
-            properties.setProperty("Ice.Trace.ThreadPool","6");
-            properties.setProperty("Ice.Compression.Level","7");
-
-            // The ZeroC framework
-            InitializationData initializationData = new InitializationData();
-            initializationData.properties = properties;
-
-            var communicator = Ice.Util.initialize(initializationData);
-
-            return communicator;
-        }
+            // The FivetService
+            services.AddHostedService<FivetService>();
+            // The logger
+            services.AddLogging();
+            // The Wait 4 Finish
+            services.Configure<HostOptions>(option =>
+            {
+                option.ShutdownTimeout = System.TimeSpan.FromSeconds(15);
+            });
+        });    
     }
 }
