@@ -6,50 +6,56 @@ namespace Fivet.Server
 {
     public class Program
     {
-    /// <summary>
-    /// Main Starting Point
-    /// <summary>
-    /// <param name ="args"></param>
-    public static void Main (string[] args)
-    {
-        CreateHostBuilder(args).Build().Run();
-    }
+        /// <summary>
+        /// Main starting point
+        /// <summary>
+        ///<param name="args"></param>
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-    /// <summary>
-    /// Build And Configure A Host
-    /// <summary>
-    /// <returns>The IHostBuilder</returns>
-    public static IHostBuilder CreateHostBuilder(string[] args)=>
-        Host
-        .CreateDefaultBuilder(args)
-        // Development, Staging, Production
-        .UseEnvironment("Development")
-        // Logging Configuration
-        .ConfigureLogging(logging =>
+        /// <summary>
+        /// Build and configure a Host
+        /// <summary>
+        /// <param name="args"></param>
+        /// <returns>The IhostBuilder</returns>
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            logging.ClearProviders();
-            logging.AddConsole(options =>
+
+            return Host
+            .CreateDefaultBuilder(args)
+            // Development, Staging, Production
+            .UseEnvironment("Development")
+            // Logging configuration
+            .ConfigureLogging(logging =>
             {
-                options.IncludeScopes = true;
-                options.TimestampFormat = "[yyyyMMdd.HHmmss.fff] ";
-                options.DisableColors = false;
-            });
-            logging.SetMinimumLevel(LogLevel.Trace);
-        })
-        // Enable Control+C listener
-        .UseConsoleLifeTime()
-        // Service Inside The DI
-        .ConfigureServices((context, services) =>
-        {
-            // The FivetService
-            services.AddHostedService<FivetService>();
-            // The logger
-            services.AddLogging();
-            // The Wait 4 Finish
-            services.Configure<HostOptions>(option =>
+                logging.ClearProviders();
+                logging.AddConsole(options =>
+                {
+                    options.IncludeScopes = true;
+                    options.TimestampFormat = "[yyyy-MM-dd HH:mm:ss.fff]";
+                    options.DisableColors = false;
+                });
+                logging.SetMinimumLevel(LogLevel.Trace);
+            })
+            // Enable Control+C listener
+            .UseConsoleLifetime()
+            // Service inside the DI
+            .ConfigureServices((context, services) =>
             {
-                option.ShutdownTimeout = System.TimeSpan.FromSeconds(15);
+                // The FivetService
+                services.AddHostedService<FivetService>();
+                // The logger
+                services.AddLogging();
+                // The wait 4 finish
+                services.Configure<HostOptions>(option =>
+                {
+                    option.ShutdownTimeout = System.TimeSpan.FromSeconds(15);
+                });
             });
-        });    
+
+        }
+
     }
 }
