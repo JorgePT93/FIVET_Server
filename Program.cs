@@ -54,8 +54,6 @@ namespace Fivet.Server
                     option.ShutdownTimeout = System.TimeSpan.FromSeconds(15);
                 });
             });
-
         }
-
     }
 }
