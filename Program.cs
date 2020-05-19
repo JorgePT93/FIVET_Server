@@ -59,6 +59,7 @@ namespace Fivet.Server
             properties.setProperty("Ice.Trace.ThreadPool","6");
             properties.setProperty("Ice.Compression.Level","7");
 
+            // The ZeroC framework
             InitializationData initializationData = new InitializationData();
             initializationData.properties = properties;
 
