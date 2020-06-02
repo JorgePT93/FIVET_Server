@@ -44,6 +44,10 @@ namespace Fivet.Server
             // Service inside the DI
             .ConfigureServices((context, services) =>
             {
+                // TheSystem
+                services.AddSingleton<TheSystemDisp_, TheSystemImpl>();
+                // Contratos
+                services.AddSingleton<ContratosDisp_, ContratosImpl>();
                 // The FivetContext
                 services.AddDbContext<FivetContext>();
                 // The FivetService
