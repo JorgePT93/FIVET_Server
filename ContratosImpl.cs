@@ -43,6 +43,24 @@ namespace Fivet.ZeroIce
             _logger.LogDebug("Done.");
         }
 
+        /// <summary>
+        /// Create the Persona
+        /// </summary>
+        /// <param name="persona">to save</param>
+        /// <param name="current">the context of zeroIce</param>
+        /// <returns></returns>
+        public override Persona crearPersona(Persona persona, Current current = null)
+        {
+            // Using the local scope
+            using(var scope = _serviceScopeFactory.CreateScope())
+            {
+                FivetContext fc = scope.ServiceProvider.GetService<FivetContext>();
+                fc.Personas.Add(persona);
+                fc.SaveChanges();
+                return persona;
+            }
+        }
+        
         public override Control crearControl(int NumeroFicha, Control control, Current current = null)
         {
             throw new System.NotImplementedException();
