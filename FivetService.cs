@@ -31,7 +31,7 @@ namespace Fivet.Server
         /// <summary>
         /// The FivetService    
         /// </summary>
-        public FivetService(ILogger<FivetService> logger, TheSystemDisp_ theSystem, ContratosDips_ contratos)
+        public FivetService(ILogger<FivetService> logger, TheSystemDisp_ theSystem, ContratosDisp_ contratos)
         {
             _logger = logger;
             _logger.LogDebug("Building FivetService...");
@@ -104,13 +104,7 @@ namespace Fivet.Server
         }
     }
 
-    /// <summary>
-    /// Clear the memory
-    /// </summary>
-    public viud Dispose()
-    {
-        _communicator.destroy();
-    }
+    
 
     /// <summary>
     /// The implementation of TheSystem interface
