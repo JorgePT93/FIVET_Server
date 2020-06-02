@@ -44,6 +44,8 @@ namespace Fivet.Server
             // Service inside the DI
             .ConfigureServices((context, services) =>
             {
+                // The FivetContext
+                services.AddDbContext<FivetContext>();
                 // The FivetService
                 services.AddHostedService<FivetService>();
                 // The logger
