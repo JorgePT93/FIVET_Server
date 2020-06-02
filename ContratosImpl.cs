@@ -1,5 +1,5 @@
 using Fivet.Dao;
-using Fivet.ZeroIce.Model;
+using Fivet.ZeroIce.model;
 using Ice;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ namespace Fivet.ZeroIce
     /// <summary>
     /// The Implementation of the Contratos
     /// </summary>
-    public class ContratosImpl : ContratosImplDisp_
+    public class ContratosImpl : ContratosDisp_
     {
         /// <summary>
         /// The Logger
