@@ -43,13 +43,22 @@ namespace Fivet.ZeroIce
             _logger.LogDebug("Done.");
         }
 
+        public override Ficha ingresarFicha (Ficha ficha, Current current = null)
+        {
+            throw new System.NotImplementedException();
+        }
+        public override Ficha obtenerFicha (int numeroFicha, Current current = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// Create the Persona
         /// </summary>
         /// <param name="persona">to save</param>
         /// <param name="current">the context of zeroIce</param>
         /// <returns></returns>
-        public override Persona crearPersona(Persona persona, Current current = null)
+        public override Persona ingresarDueno(Persona persona, Current current = null)
         {
             // Using the local scope
             using(var scope = _serviceScopeFactory.CreateScope())
@@ -60,13 +69,23 @@ namespace Fivet.ZeroIce
                 return persona;
             }
         }
-        
-        public override Control crearControl(int NumeroFicha, Control control, Current current = null)
+
+        public override Persona obtenerDueno (string rut, Current current = null)
         {
             throw new System.NotImplementedException();
         }
 
-        public override Ficha crearFicha (Ficha ficha, Current current = null)
+        public override Control ingresarControl(int numeroFicha, Control control, Current current = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override Foto ingresarFoto (Foto foto, Current current = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override Examen ingresarExamen (Examen examen, Current current = null)
         {
             throw new System.NotImplementedException();
         }
