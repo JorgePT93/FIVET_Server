@@ -11,7 +11,7 @@ namespace Fivet.Server
     /// <summary>
     /// The Fivet Service    
     /// </summary>
-    internal class FivetService : IHostedService
+    internal class FivetService : IHostedService, IDisposable
     {
         /// <summary>
         /// The Logger    
@@ -27,6 +27,16 @@ namespace Fivet.Server
         /// The Communicator    
         /// </summary>
         private readonly Communicator _communicator;
+
+        /// <summary>
+        /// The System    
+        /// </summary>
+        private readonly TheSystemDisp_ _theSystem;
+
+        /// <summary>
+        /// The Contratos    
+        /// </summary>
+        private readonly ContratosDisp_ _contratos;
 
         /// <summary>
         /// The FivetService    
@@ -51,11 +61,8 @@ namespace Fivet.Server
             // tpc(protocol) -z (compression) -t 15000 (timeout in ms) -p 8080 (port to bind)
             var adapter = _communicator.createObjectAdapterWithEndpoints("TheSystem", "tcp -z -t 15000 -p " + _port);
 
-            // The interface
-            TheSystem theSystem = new TheSystemImpl();
-
             // Register in the communicator
-            adapter.add(theSystem, Util.stringToIdentity("TheSystem"));
+            adapter.add(_theSystem, Util.stringToIdentity("TheSystem"));
 
             // Activation
             adapter.activate();
@@ -102,41 +109,10 @@ namespace Fivet.Server
 
             return Ice.Util.initialize(initializationData);
         }
-    }
-
-    
-
-    /// <summary>
-    /// The implementation of TheSystem interface
-    /// </summary>
-    public class TheSystemImpl : TheSystemDisp_
-    {
-        /// <summary>
-        /// Return the difference in time
-        /// </summary>
-        /// <param name="clientTime"></param>
-        /// <returns>The Delay</returns>
-        public override long getDelay(long clientTime, Ice.Current current = null)
+        
+        public void Dispose()
         {
-            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - clientTime;
-        }
-    }
-
-}
-
-
-/// <summary>
-/// The implementation of TheSystem interface
-/// </summary>
-public class TheSystemImpl : TheSystemDisp_
-{
-    /// <summary>
-    /// Return the difference in time
-    /// </summary>
-    /// <param name="clientTime"></param>
-    /// <returns>The Delay</returns>
-    public override long getDelay(long clientTime, Ice.Current current = null)
-    {
-        return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - clientTime;
+            _communicator.destroy();
+        }        
     }
 }
