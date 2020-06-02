@@ -2011,9 +2011,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Microsoft.EntityFrameworkCore.Sqlite >= 3.1.4",
+      "Microsoft.EntityFrameworkCore.Sqlite >= *",
       "Microsoft.Extensions.DependencyInjection >= 3.1.4",
-      "Microsoft.Extensions.Hosting >= *",
+      "Microsoft.Extensions.Hosting >= 3.1.4",
       "Microsoft.Extensions.Logging >= 3.1.4",
       "Microsoft.Extensions.Logging.Console >= 3.1.4",
       "zeroc.ice.net >= 3.7.3.2",
@@ -2057,7 +2057,7 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Sqlite": {
             "target": "Package",
-            "version": "[3.1.4, )"
+            "version": "[*, )"
           },
           "Microsoft.Extensions.DependencyInjection": {
             "target": "Package",
@@ -2065,7 +2065,7 @@
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",
-            "version": "[*, )"
+            "version": "[3.1.4, )"
           },
           "Microsoft.Extensions.Logging": {
             "target": "Package",

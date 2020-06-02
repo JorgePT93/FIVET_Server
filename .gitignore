@@ -38,3 +38,12 @@ generated/
 
 # Visual Studio 2015
 .vs/
+obj/project.nuget.cache
+obj/Debug/netcoreapp3.1/fivet_server.assets.cache
+obj/Debug/netcoreapp3.1/fivet_server.csproj.CoreCompileInputs.cache
+obj/Debug/netcoreapp3.1/fivet_server.csproj.FileListAbsolute.txt
+obj/Debug/netcoreapp3.1/fivet_server.csprojAssemblyReference.cache
+obj/Debug/netcoreapp3.1/fivet_server.dll
+obj/Debug/netcoreapp3.1/fivet_server.pdb
+bin/Debug/netcoreapp3.1/fivet_server.dll
+bin/Debug/netcoreapp3.1/fivet_server.pdb

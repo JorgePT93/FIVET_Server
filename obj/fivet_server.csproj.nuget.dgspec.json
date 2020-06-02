@@ -38,7 +38,7 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[3.1.4, )"
+              "version": "[*, )"
             },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
@@ -46,7 +46,7 @@
             },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
-              "version": "[*, )"
+              "version": "[3.1.4, )"
             },
             "Microsoft.Extensions.Logging": {
               "target": "Package",
