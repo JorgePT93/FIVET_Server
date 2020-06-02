@@ -30,12 +30,13 @@ module model {
      * Class Persona
      * @author Jorge Pizarro-Tapia
      */
+    ["cs:property"]
     class Persona{
 
        /**
         * PK
         */
-       int id;
+       int uid;
 
        /**
         * Rut: 81.518.400-9
