@@ -31,9 +31,12 @@ namespace Fivet.Server
         /// <summary>
         /// The FivetService    
         /// </summary>
-        public FivetService(ILogger<FivetService> logger)
+        public FivetService(ILogger<FivetService> logger, TheSystemDisp_ theSystem, ContratosDips_ contratos)
         {
             _logger = logger;
+            _logger.LogDebug("Building FivetService...");
+            _theSystem = theSystem;
+            _contratos = contratos;
             _communicator = buildCommunicator();
         }
 
@@ -99,6 +102,14 @@ namespace Fivet.Server
 
             return Ice.Util.initialize(initializationData);
         }
+    }
+
+    /// <summary>
+    /// Clear the memory
+    /// </summary>
+    public viud Dispose()
+    {
+        _communicator.destroy();
     }
 
     /// <summary>
