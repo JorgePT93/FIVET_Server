@@ -21,7 +21,7 @@ namespace Fivet.Dao
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Using SQLite
-            optionsBuilder.UseSqLite("Data Source=fivet.db", options => 
+            optionsBuilder.UseSqlite("Data Source=fivet.db", options => 
             {
                 options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);                
             });
@@ -49,9 +49,10 @@ namespace Fivet.Dao
                 new Persona()
                 {
                     uid = 1,
+                    rut = "12345678-9",
                     nombre = "Jorge",
-                    apellido = "Pizarro",
                     direccion = "Angamos #0618",
+                    telefonoFijo = 56999091742,
                     email = "jpt010@alumnos.ucn.cl"
                 }
             );
