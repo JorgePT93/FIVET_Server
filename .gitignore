@@ -47,3 +47,9 @@ obj/Debug/netcoreapp3.1/fivet_server.dll
 obj/Debug/netcoreapp3.1/fivet_server.pdb
 bin/Debug/netcoreapp3.1/fivet_server.dll
 bin/Debug/netcoreapp3.1/fivet_server.pdb
+generated/SliceCompile.domain.d
+obj/fivet_server.csproj.nuget.dgspec.json
+obj/project.assets.json
+obj/project.nuget.cache
+obj/Debug/netcoreapp3.1/fivet_server.assets.cache
+obj/Debug/netcoreapp3.1/fivet_server.csproj.CoreCompileInputs.cache
